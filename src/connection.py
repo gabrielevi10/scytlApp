@@ -24,11 +24,15 @@ class Connection:
 
     def receive(self):
         received_bytes = []
+        b = ''
         rcv_byte = binascii.hexlify(self.sock.recv(1))
         if rcv_byte == b'c6':
             while rcv_byte != b'21':
                 rcv_byte = binascii.hexlify(self.sock.recv(1))
                 received_bytes.append(rcv_byte)
+        for x in stringlist:
+            b += x
+        print(b)
         return received_bytes
 
     def send(self, message):
