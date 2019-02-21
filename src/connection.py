@@ -8,15 +8,17 @@ class Connection:
     def connect(self, ip, port):
         try:
             self.sock.connect_ex((ip, port))
+            print("Connected on " + ip + ":" + str(port))
             return 'ok'
         except:
-            print("Some error occurred in connection")
+            print("Some error occurred in connection.")
             return 'error'
 
     def disconnect(self):
         try:
             self.sock.shutdown(socket.SHUT_RDWR)
             self.sock.close()
+            print("Disconnected.")
             return 'ok'
         except:
             print("Some error occurred in disconnetion")
@@ -30,16 +32,12 @@ class Connection:
             while rcv_byte != b'21':
                 rcv_byte = binascii.hexlify(self.sock.recv(1))
                 received_bytes.append(rcv_byte)
-        for x in stringlist:
-            b += x
-        print(b)
         return received_bytes
 
     def send(self, message):
         try:
             self.sock.send(message)
-            response = self.sock.recv(7)
-            print(response)
+            response = binascii.hexlify(self.sock.recv(7))
             return response
         except Exception as e:
             print("Some error occured on send")

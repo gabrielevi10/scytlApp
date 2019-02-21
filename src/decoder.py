@@ -1,5 +1,6 @@
 import binascii
 
+
 class Decoder:
     def __init__(self):
         self.start_packet = 'c6'
@@ -44,9 +45,6 @@ class Decoder:
             'f': '1111'
         }
 
-        # self.client.connect("189.6.76.118", 50046)
-
-
     def divide(self, rcv_bytes):
         strbytes = [x.decode('utf-8') for x in rcv_bytes]
         packet = ''
@@ -85,9 +83,13 @@ class Decoder:
             if v == value:
                 return k
 
-    def decode(self, bit_str):
+    def decode(self, packet):
         converted_str = ''
         asc_str = ''
+        bit_str = ''
+
+        for i in packet:
+            bit_str += self.transform(i)
 
         for i in range(int(len(bit_str) / 4)):
             converted_str += self.getKeybyValue(self.hex_table, bit_str[:4])
@@ -98,3 +100,17 @@ class Decoder:
             converted_str = converted_str[2:].strip()
 
         return asc_str.strip()
+
+    def finalize(self, asc_str):
+        c = 0
+        aux = ''
+        for i in asc_str:
+            if i == ' ':
+                aux += '_'
+            elif c % 2 == 0:
+                aux += i.upper()
+            else:
+                aux += i.lower()
+            c += 1
+
+        return aux[::-1]
