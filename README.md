@@ -21,7 +21,7 @@ make test_connection
 make test_decoder
 make test_encoder
 ```
-To view the test coverage:
+To view the test coverage (causes an execution error):
 ```
 make coverage
 ```
