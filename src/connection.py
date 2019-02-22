@@ -4,7 +4,7 @@ import binascii
 class Connection:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+    
     def connect(self, ip, port):
         try:
             self.sock.connect_ex((ip, port))
@@ -24,6 +24,7 @@ class Connection:
             print("Some error occurred in disconnetion")
             return 'error'
 
+    # Receive the packet from the server, using start packet and end trasmission 
     def receive(self):
         received_bytes = []
         b = ''
@@ -34,6 +35,7 @@ class Connection:
                 received_bytes.append(rcv_byte)
         return received_bytes
 
+    # Send a message to server and waits for a response
     def send(self, message):
         try:
             self.sock.send(message)

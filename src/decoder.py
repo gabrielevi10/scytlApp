@@ -45,6 +45,7 @@ class Decoder:
             'f': '1111'
         }
 
+    # Divide the received packet using start packet, end packet and end transmission
     def divide(self, rcv_bytes):
         strbytes = [x.decode('utf-8') for x in rcv_bytes]
         packet = ''
@@ -64,11 +65,13 @@ class Decoder:
             else:
                 packet += s
 
+    # First, converts hexadecimal value to binary and then tranforms 5 bytes into 4 bytes using the decoder table
     def transform(self, packet):
         bit_str = ''
         converted_str = ''
         c = 0
         for x in packet:
+            # hex -> bin
             bit_str += self.hex_table[x]
 
         str_len = len(bit_str)
@@ -78,11 +81,13 @@ class Decoder:
 
         return converted_str
 
+    # Get a key using the value in a dict
     def getKeybyValue(self, dict, value):
         for k, v in dict.items():
             if v == value:
                 return k
 
+    # Decode the bytes as an ASCII string and remove trailing spaces
     def decode(self, packet):
         converted_str = ''
         asc_str = ''
@@ -101,6 +106,7 @@ class Decoder:
 
         return asc_str.strip()
 
+    # Makes odd chars lower case, even chars upper case and returns the reverse string
     def finalize(self, asc_str):
         c = 0
         aux = ''

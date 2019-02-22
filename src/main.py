@@ -33,5 +33,5 @@ if __name__ == "__main__":
     else:
         print("The server returned ERR =( =( =/")
     print()
-    
+
     client.disconnect()

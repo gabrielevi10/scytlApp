@@ -44,12 +44,13 @@ class Encoder:
             '1111': 'f'
         }
 
-
+    # Converts ASCII to corresponding hexadecimal value
     def turnAscToByte(self, asc_str):
         while len(asc_str) % 4 is not 0:
             asc_str += '_'
         return binascii.hexlify(asc_str.encode()).decode()
 
+    # Encode the message using the protocol X
     def encode(self, msg_byte):
         c = 1
         bit_list = []
@@ -58,6 +59,7 @@ class Encoder:
         converted_list = []
 
         for b in msg_byte:
+            # 4 bytes -> 5 bytes
             aux += self.encoder_table[b]
             if c % 8 == 0:
                 bit_list.append(aux)
@@ -66,6 +68,7 @@ class Encoder:
 
         for i in bit_list:
             for j in range(int(len(i) / 4)):
+                # bin -> hexadecimal
                 converted_str += self.hex_table[i[:4]]
                 i = i[4:].strip()
             converted_list.append(converted_str)
@@ -73,13 +76,15 @@ class Encoder:
 
         return converted_list
 
-
+    # Does a xor between bytes
+    # Found in: https://stackoverflow.com/questions/17404690/how-to-xor-two-hex-strings-so-that-each-byte-is-xored-separately
     def xor(self, b, prime_factor):
         return binascii.hexlify(
             bytes(c1 ^ c2 for c1, c2 in zip(
                 binascii.unhexlify(b[-len(prime_factor):]), binascii.unhexlify(prime_factor))))
 
-
+    # Adds start packet, end packet and end transmission to message
+    # Concatenates all bytes into one byte array to send 
     def makePacket(self, converted_list):
         packet = []
         for i in converted_list:
@@ -94,15 +99,5 @@ class Encoder:
         bytes_packet = bytes()
         for a in packet:
             bytes_packet += bytearray(binascii.unhexlify(a))
-        
+
         return(bytes_packet)
-
-
-
-if __name__ == "__main__":
-    e = Encoder()
-    a = e.turnAscToByte("BsB_KaO")
-    print(a)
-    e.encode(a)
-    print(e.makePacket(e.encode(a)))
-    # print(e.xor())
